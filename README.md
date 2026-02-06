@@ -10,3 +10,6 @@ This project contains Playwright automation tests for the SauceDemo website(http
  or to Run all the tests together:-
 
  "npx playwright test --headed"
+ to run allure report:-
+ npm run getReport
+ 
