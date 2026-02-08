@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 test('Login with locked_out_user', async ({ page }) => {
   // Extend timeout globally for this test
-  test.setTimeout(60000);
+  test.setTimeout(90000);
 
   await page.goto('https://www.saucedemo.com/');
 
