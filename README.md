@@ -9,15 +9,16 @@ This project contains Playwright automation tests for the SauceDemo website(http
 
 
 **Packages to Install:**
+```javascript
 npm install
 npx playwright install
 # for allure reports:
 npm install --save-dev allure-playwright
-npm install -g allure-commandline
+npm install -g allure-commandline```
 
 
 #  To run the test cases:-
- Q1: npx playwright test tests/login.spec.js --headed
+ ## Q1: npx playwright test tests/login.spec.js --headed
  Q2: npx playwright test tests/standard_user.spec.js --headed
  Q3: npx playwright test tests/performance_user.spec.js --headed
 
