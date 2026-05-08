@@ -1,40 +1,50 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage.js';
+import { ProductsPage } from '../pages/ProductsPage.js';
+import { CartPage } from '../pages/CartPage.js';
+import { CheckoutPage } from '../pages/CheckoutPage.js';
 
-test('Standard user purchase flow', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-  await page.fill('#user-name', 'standard_user');
-  await page.fill('#password', 'secret_sauce');
-  await page.click('#login-button');
+test.describe('Q2 - Standard User Purchase Flow', () => {
 
-  await page.click('#react-burger-menu-btn');
-  await page.click('#reset_sidebar_link');
+  test('Standard user: reset state, add 3 items, checkout, verify order, reset and logout', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const productsPage = new ProductsPage(page);
+    const cartPage = new CartPage(page);
+    const checkoutPage = new CheckoutPage(page);
 
-  await page.click('#add-to-cart-sauce-labs-backpack');
-  await page.click('#add-to-cart-sauce-labs-bike-light');
-  await page.click('#add-to-cart-sauce-labs-bolt-t-shirt');
+    await loginPage.goto();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await productsPage.verifyPageLoaded();
 
-  await page.click('.shopping_cart_link');
-  await page.click('#checkout');
-  await page.fill('#first-name', 'Test');
-  await page.fill('#last-name', 'User');
-  await page.fill('#postal-code', '12345');
-  await page.click('#continue');
+    await productsPage.resetState();
 
-  const products = await page.locator('.inventory_item_name').allTextContents();
-  expect(products).toContain('Sauce Labs Backpack');
-  expect(products).toContain('Sauce Labs Bike Light');
-  expect(products).toContain('Sauce Labs Bolt T-Shirt');
+    await productsPage.addProductToCart('sauce-labs-backpack');
+    await productsPage.addProductToCart('sauce-labs-bike-light');
+    await productsPage.addProductToCart('sauce-labs-bolt-t-shirt');
+    await productsPage.verifyCartCount(3);
 
-  const total = await page.locator('.summary_total_label').textContent();
-  expect(total).toContain('Total:');
+    await productsPage.goToCart();
+    await cartPage.verifyItemsInCart([
+      'Sauce Labs Backpack',
+      'Sauce Labs Bike Light',
+      'Sauce Labs Bolt T-Shirt'
+    ]);
 
-  await page.click('#finish');
+    await cartPage.checkout();
+    await checkoutPage.fillDetails('Test', 'User', '12345');
+    await checkoutPage.verifyProductsInSummary([
+      'Sauce Labs Backpack',
+      'Sauce Labs Bike Light',
+      'Sauce Labs Bolt T-Shirt'
+    ]);
+    await checkoutPage.verifyTotalExists();
+    await checkoutPage.finishOrder();
+    await checkoutPage.verifySuccess();
 
-  // ✅ Fixed assertion line
-  await expect(page.locator('.complete-header'))
-    .toHaveText('Thank you for your order!');
+    await productsPage.resetState();
+    await productsPage.logout();
 
-  await page.click('#react-burger-menu-btn');
-  await page.click('#reset_sidebar_link');
-  await page.click('#logout_sidebar_link');
+    await expect(page).toHaveURL('https://www.saucedemo.com/');
+  });
+
 });

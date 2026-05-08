@@ -1,5 +1,5 @@
-const { test, expect } = require('@playwright/test');
-const { LoginPage } = require('../pages/LoginPage');
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage.js';
 
 test.describe('Q1 - Login Tests', () => {
 

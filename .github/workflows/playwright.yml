@@ -27,7 +27,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: npx playwright test --reporter=list,html,allure-playwright
+        run: npx playwright test tests/ --reporter=list,html,allure-playwright
         env:
           CI: true
 

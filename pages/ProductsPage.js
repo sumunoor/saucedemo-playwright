@@ -1,4 +1,4 @@
-const { expect } = require('@playwright/test');
+import { expect } from '@playwright/test';
 
 class ProductsPage {
   constructor(page) {
@@ -20,7 +20,6 @@ class ProductsPage {
     await this.burgerMenu.click();
     await this.page.locator('.bm-menu-wrap').waitFor({ state: 'visible' });
     await this.resetAppState.click();
-    // Close menu by clicking X button
     await this.page.locator('#react-burger-cross-btn').click();
     await this.page.locator('.bm-menu-wrap').waitFor({ state: 'hidden' });
   }
@@ -60,4 +59,4 @@ class ProductsPage {
   }
 }
 
-module.exports = { ProductsPage };
+export { ProductsPage };
