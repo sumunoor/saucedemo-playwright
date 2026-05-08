@@ -28,11 +28,15 @@ test('Standard user purchase flow', async ({ page }) => {
   const total = await page.locator('.summary_total_label').textContent();
   expect(total).toContain('Total:');
 
-  await page.click('#finish');
-  const successMsg = await page.locator('.complete-header').textContent();
-  expect(successMsg).toContain('THANK YOU FOR YOUR ORDER');
+ await page.click('#finish');
 
-  await page.click('#react-burger-menu-btn');
-  await page.click('#reset_sidebar_link');
-  await page.click('#logout_sidebar_link');
+// ✅ Fixed assertion
+await expect(page.locator('.complete-header'))
+  .toHaveText('Thank you for your order!');
+
+await page.click('#react-burger-menu-btn');
+await page.click('#reset_sidebar_link');
+await page.click('#logout_sidebar_link');
+
+
 });

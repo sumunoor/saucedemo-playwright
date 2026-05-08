@@ -26,10 +26,13 @@ test('Performance glitch user purchase flow', async ({ page }) => {
   expect(total).toContain('Total:');
 
   await page.click('#finish');
-  const successMsg = await page.locator('.complete-header').textContent();
-  expect(successMsg).toContain('THANK YOU FOR YOUR ORDER');
 
-  await page.click('#react-burger-menu-btn');
-  await page.click('#reset_sidebar_link');
-  await page.click('#logout_sidebar_link');
+// ✅ Fixed assertion
+await expect(page.locator('.complete-header'))
+  .toHaveText('Thank you for your order!');
+
+await page.click('#react-burger-menu-btn');
+await page.click('#reset_sidebar_link');
+await page.click('#logout_sidebar_link');
+
 });

@@ -1,45 +1,69 @@
-const { test, expect, chromium } = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
+const { LoginPage } = require('../pages/LoginPage');
+const { ProductsPage } = require('../pages/ProductsPage');
+const { CartPage } = require('../pages/CartPage');
+const { CheckoutPage } = require('../pages/CheckoutPage');
 
-test('Performance glitch user purchase flow', async () => {
-  // Launch browser with slowMo so every action pauses ~1s
-  const browser = await chromium.launch({ headless: false, slowMo: 1000 });
-  const context = await browser.newContext();
-  const page = await context.newPage();
+test.describe('Q3 - Performance Glitch User Purchase Flow', () => {
 
-  // Give the test a generous timeout
   test.setTimeout(120000);
 
-  await page.goto('https://www.saucedemo.com/');
+  test('Performance glitch user: reset, sort Z-A, add first product, checkout, verify, reset and logout', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const productsPage = new ProductsPage(page);
+    const cartPage = new CartPage(page);
+    const checkoutPage = new CheckoutPage(page);
 
-  await page.locator('#user-name').fill('performance_glitch_user');
-  await page.locator('#password').fill('secret_sauce');
-  await page.locator('#login-button').click();
+    // Step 1: Login
+    await loginPage.goto();
+    await loginPage.login('performance_glitch_user', 'secret_sauce');
+    await productsPage.verifyPageLoaded();
 
-  const sortDropdown = page.locator('.product_sort_container');
-  await expect(sortDropdown).toBeVisible();
-  await sortDropdown.selectOption('za');
+    // Step 2: Reset App State
+    await productsPage.resetState();
 
-  await page.locator('.btn_inventory').first().click();
+    // Step 3: Sort products Z-A
+    await productsPage.sortZA();
 
-  await expect(page.locator('.shopping_cart_link')).toBeVisible();
-  await page.locator('.shopping_cart_link').click();
+    // Step 4: Get first product name
+    const firstProductName = await productsPage.getFirstProductName();
+    expect(firstProductName).toBeTruthy();
 
-  await expect(page.locator('#checkout')).toBeVisible();
-  await page.locator('#checkout').click();
+    // Step 5: Add first product to cart
+    await productsPage.addFirstProductToCart();
+    await productsPage.verifyCartCount(1);
 
-  await page.locator('#first-name').fill('Perf');
-  await page.locator('#last-name').fill('User');
-  await page.locator('#postal-code').fill('54321');
-  await page.locator('#continue').click();
+    // Step 6: Go to cart
+    await productsPage.goToCart();
 
-  const products = await page.locator('.inventory_item_name').allTextContents();
-  expect(products.length).toBeGreaterThan(0);
+    // Step 7: Verify cart not empty
+    await cartPage.verifyCartNotEmpty();
 
-  const total = await page.locator('.summary_total_label').textContent();
-  expect(total).toContain('Total:');
+    // Step 8: Checkout
+    await cartPage.checkout();
 
-  await page.locator('#finish').click();
-  await expect(page.locator('.complete-header')).toHaveText(/Thank you for your order!/);
+    // Step 9: Fill checkout details
+    await checkoutPage.fillDetails('Perf', 'User', '54321');
 
-  await browser.close();
+    // Step 10: Verify product name in summary
+    await checkoutPage.verifyProductsInSummary([firstProductName]);
+
+    // Step 11: Verify total price
+    await checkoutPage.verifyTotalExists();
+
+    // Step 12: Finish order
+    await checkoutPage.finishOrder();
+
+    // ✅ Step 13: Verify success message (fixed)
+    await checkoutPage.verifySuccess();
+
+    // Step 14: Reset App State again
+    await productsPage.resetState();
+
+    // Step 15: Logout
+    await productsPage.logout();
+
+    // Step 16: Verify redirected to login page
+    await expect(page).toHaveURL('https://www.saucedemo.com/');
+  });
 });
