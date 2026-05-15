@@ -1,55 +1,199 @@
-# SauceDemo Automation Testing (Playwright)
+# SauceDemo Playwright Automation Framework
 
-## 📌 Overview
-This project contains Playwright automation tests for the [SauceDemo](https://www.saucedemo.com/) website.  
-Reports are generated in both `allure-report` and `playwright-report` folders.  
-Tests are executed in **Chrome** and **Firefox** browsers.
+## Project Overview
 
----
+This project is an end-to-end automation testing framework developed using Playwright and JavaScript for the SauceDemo e-commerce application.
 
-## 🧪 Features Tested
-- Login (valid & invalid users)
-- Add to cart
-- Cart validation
-- Checkout flow
+The framework validates critical business workflows including authentication, product interaction, cart functionality, and checkout process. The project follows Page Object Model (POM) architecture for improved scalability, reusability, and maintainability.
 
 ---
 
-## 🛠 Requirements
-- Node.js (>=18)
-- Git (to clone the repo)
-- VS Code (recommended editor)
+# Application Under Test
+
+Website: https://www.saucedemo.com/
 
 ---
 
-## 📦 Packages to Install
+# Testing Scope
+
+The following modules were tested:
+
+- Login Functionality
+- Product Listing
+- Add to Cart
+- Cart Validation
+- Checkout Process
+- Logout Functionality
+
+---
+
+# Testing Types Covered
+
+- Functional Testing
+- Smoke Testing
+- Regression Testing
+- UI Testing
+- End-to-End Testing
+- Cross-Browser Testing
+
+---
+
+# Tech Stack
+
+- Playwright
+- JavaScript
+- Node.js
+- Git & GitHub
+- GitHub Actions
+- Allure Report
+
+---
+
+# Framework Features
+
+- Page Object Model (POM) Architecture
+- Reusable Page Classes
+- Automated Assertions & Validations
+- Cross-Browser Execution
+- Allure Reporting
+- Playwright HTML Reporting
+- CI/CD Integration using GitHub Actions
+- Screenshot Capture on Failure
+- Stable Synchronization Strategies
+
+---
+
+# Supported Browsers
+
+- Chromium
+- Firefox
+
+---
+
+# Project Structure
+
+```bash
+saucedemo-playwright/
+│
+├── pages/
+├── tests/
+├── reports/
+├── screenshots/
+├── allure-results/
+├── allure-report/
+├── playwright-report/
+├── .github/workflows/
+├── playwright.config.js
+├── package.json
+└── README.md
+```
+
+---
+
+# Installation & Setup
+
+## Clone Repository
+
+```bash
+git clone https://github.com/sumunoor/saucedemo-playwright.git
+```
+
+## Navigate to Project Directory
+
+```bash
+cd saucedemo-playwright
+```
+
+## Install Dependencies
+
 ```bash
 npm install
 npx playwright install
-# For Allure reports:
-npm install --save-dev allure-playwright
-npm install -g allure-commandline
+```
 
-# Q1: Login test
-npx playwright test tests/login.spec.js --headed
+---
 
-# Q2: Standard user test
-npx playwright test tests/standard_user.spec.js --headed
+# Running Test Cases
 
-# Q3: Performance glitch user test
-npx playwright test tests/performance_user.spec.js --headed
+## Run All Tests
 
-#for run all test together-
+```bash
 npx playwright test --headed
-#Playwright HTML report:
+```
+
+## Run Login Test
+
+```bash
+npx playwright test tests/login.spec.js --headed
+```
+
+## Run Standard User Test
+
+```bash
+npx playwright test tests/standard_user.spec.js --headed
+```
+
+## Run Performance Glitch User Test
+
+```bash
+npx playwright test tests/performance_user.spec.js --headed
+```
+
+---
+
+# Reports
+
+## Playwright HTML Report
+
+```bash
 npx playwright show-report
+```
 
-#Allure report (custom script):
+## Generate Allure Report
+
+```bash
 npm run getReport
+```
 
+---
+
+# CI/CD Integration
+
+This project is integrated with GitHub Actions for automated test execution and reporting.
+
+CI/CD Features:
+- Automated workflow execution
+- Continuous Integration pipeline
+- Automated validation on code push
+- Test execution reporting
 
 ---
 
 
+# Key Achievements
 
- 
+- Developed reusable automation framework using Playwright and POM architecture
+- Automated critical e-commerce user workflows
+- Integrated CI/CD pipeline using GitHub Actions
+- Implemented cross-browser test execution
+- Added Allure and Playwright reporting support
+
+---
+
+# Future Improvements
+
+- Data-Driven Testing
+- Parallel Execution
+- Environment Configuration
+- Retry Mechanism
+- API Integration Testing
+
+---
+
+# Author
+
+## Sumaiya Noor Muna
+
+- GitHub: https://github.com/sumunoor
+- Portfolio: https://sumaiya-sqa.netlify.app/
+- LinkedIn: www.linkedin.com/in/sumaiya-noor-a3ab63362
